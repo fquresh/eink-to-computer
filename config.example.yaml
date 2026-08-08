@@ -1,15 +1,18 @@
 # Copy this file to config.yaml and fill in your values.
 # config.yaml is gitignored - it may contain your API key.
 
-# Folder the pipeline watches for incoming Boox note PDFs.
-# Point your WebDAV server (or Syncthing/Dropbox folder) here.
-inbox: ~/boox-inbox
+# Folder the pipeline watches for incoming note PDFs.
+# Export PDFs from your e-ink device (Boox, reMarkable, Supernote, Kindle Scribe, etc.)
+# and drop them here. Or point this at a cloud-synced folder (Google Drive, Dropbox, etc.)
+# for automatic transfer.
+inbox: ~/eink-inbox
 
 # Your Obsidian vault. Notes land in <notes_folder> inside it.
 vault: /path/to/your/Obsidian/Vault
-notes_folder: Handwritten Boox Notes
+notes_folder: Handwritten Notes
 
-# OCR backend: gemini (default) | mistral | local
+# OCR backend: gemini | mistral | local
+# All backends use vision/OCR-capable models. See README for guidance.
 backend: gemini
 
 gemini:
@@ -27,6 +30,10 @@ mistral:
   model: mistral-ocr-latest
 
 local:
-  # Fully local fallback via Ollama (ollama pull qwen3-vl).
+  # Fully local OCR via Ollama. No API key, no cloud, works offline.
+  # Install Ollama (https://ollama.com), then pull a vision-capable model:
+  #   ollama pull qwen3-vl
+  # Any vision/OCR model that works with Ollama's /api/generate endpoint will work.
+  # Models improve over time - check https://ollama.com/search?q=vision for current options.
   host: http://127.0.0.1:11434
   model: qwen3-vl

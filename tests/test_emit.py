@@ -1,7 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 
-from boox_to_computer.emit import build_markdown, emit_note, slugify
+from eink_to_computer.emit import build_markdown, emit_note, slugify
 
 
 def test_slugify():
@@ -22,7 +22,7 @@ def test_build_markdown_structure():
     assert md.startswith("---\n")
     assert 'title: "Product brainstorm"' in md
     assert "created: 2026-08-05" in md
-    assert "tags:\n  - boox\n  - handwritten" in md
+    assert "tags:\n  - eink\n  - handwritten" in md
     assert "boox_pdf_hash: abc123" in md
     assert "![[attachments/product-brainstorm-p1.png]]" in md
     assert "- idea one" in md

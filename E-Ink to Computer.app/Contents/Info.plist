@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleName</key>
-    <string>Boox to Computer</string>
+    <string>E-Ink to Computer</string>
     <key>CFBundleDisplayName</key>
-    <string>Boox to Computer</string>
+    <string>E-Ink to Computer</string>
     <key>CFBundleIdentifier</key>
-    <string>com.fquresh.boox-to-computer</string>
+    <string>com.fquresh.eink-to-computer</string>
     <key>CFBundleVersion</key>
     <string>0.1.0</string>
     <key>CFBundleShortVersionString</key>

@@ -1,7 +1,7 @@
 [project]
-name = "boox-to-computer"
+name = "eink-to-computer"
 version = "0.1.0"
-description = "Pipeline: Boox handwritten note PDFs -> vision OCR -> Obsidian markdown"
+description = "Pipeline: e-ink handwritten note PDFs -> vision OCR -> Obsidian markdown"
 requires-python = ">=3.11"
 dependencies = [
     "pymupdf>=1.24",
@@ -16,11 +16,11 @@ dependencies = [
 dev = ["pytest>=8.0"]
 
 [project.scripts]
-boox-to-computer = "boox_to_computer.cli:main"
+eink-to-computer = "eink_to_computer.cli:main"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/boox_to_computer"]
+packages = ["src/eink_to_computer"]

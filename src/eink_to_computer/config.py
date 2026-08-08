@@ -1,4 +1,4 @@
-"""Configuration loading for boox-to-computer."""
+"""Configuration loading for eink-to-computer."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ import yaml
 
 DEFAULT_CONFIG_PATHS = [
     Path("config.yaml"),
-    Path.home() / ".config" / "boox-to-computer" / "config.yaml",
+    Path.home() / ".config" / "eink-to-computer" / "config.yaml",
 ]
 
 
@@ -38,7 +38,7 @@ class LocalConfig:
 class Config:
     inbox: Path
     vault: Path
-    notes_folder: str = "Handwritten Boox Notes"
+    notes_folder: str = "Handwritten Notes"
     backend: str = "gemini"
     gemini: GeminiConfig = field(default_factory=GeminiConfig)
     mistral: MistralConfig = field(default_factory=MistralConfig)
@@ -50,7 +50,7 @@ class Config:
 
     @property
     def state_path(self) -> Path:
-        return self.inbox / ".boox-to-computer-state.json"
+        return self.inbox / ".eink-to-computer-state.json"
 
 
 def _resolve_api_key(config_value: str, env_var: str) -> str:

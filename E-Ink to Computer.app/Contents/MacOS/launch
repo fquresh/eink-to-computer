@@ -1,5 +1,5 @@
 #!/bin/bash
-# Launch the Boox to Computer web UI.
+# Launch the E-Ink to Computer web UI.
 # Double-click this .app, or run the launch script directly.
 cd "$(dirname "$0")/../../.." || exit 1
-exec uv run boox-to-computer gui
+exec uv run eink-to-computer gui

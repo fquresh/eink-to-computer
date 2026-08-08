@@ -1,107 +1,107 @@
-# boox-to-computer
+# eink-to-computer
 
-Handwritten notes from an ONYX Boox e-ink tablet, transcribed by a vision model and filed as searchable Markdown in Obsidian.
+Handwritten notes from any e-ink tablet, transcribed by a vision model and filed as searchable Markdown in Obsidian.
 
-Scribble on the tablet, export the note as a PDF, click one button, and a transcribed Markdown note with the original page images appears in your Obsidian vault.
+Works with Boox, reMarkable, Supernote, Kindle Scribe, and any device that can export notes as PDF.
 
 ## How it works
 
 ```
-Boox Notes app --(export PDF)--> ~/boox-inbox (your computer)
-  --> boox-to-computer
-    --> render pages to images (PyMuPDF)
-    --> transcribe with a vision model (Gemini Flash free tier)
+E-ink tablet --(export PDF)--> inbox folder (your computer)
+  --> eink-to-computer
+    --> render pages to images
+    --> transcribe with a vision/OCR model
     --> write Markdown + page images into your Obsidian vault
 ```
-
-The pipeline never touches the tablet's internal stroke database (root-only, and blocked by Android scoped storage anyway).
-It uses the Notes app's own PDF export, which is the stable, supported seam.
 
 Every PDF is SHA-256 hashed and recorded in a state file, so re-runs never duplicate notes or burn OCR quota.
 The original page image is always embedded above the transcription, so nothing is lost even if OCR misreads something.
 
 ## Quick start
 
-### 1. Install
-
 ```sh
-git clone https://github.com/fquresh/boox-to-computer.git
-cd boox-to-computer
+git clone https://github.com/fquresh/eink-to-computer.git
+cd eink-to-computer
 uv sync
 cp config.example.yaml config.yaml
 ```
 
-Edit `config.yaml`: set `vault` to your Obsidian vault path and paste your Gemini API key.
-Get a free key at https://aistudio.google.com -> "Get API key" -> "Create API key in new project".
-You can also set the `GEMINI_API_KEY` environment variable instead of putting it in the file.
-`config.yaml` is gitignored, so the key never gets committed.
+Edit `config.yaml`: set `vault` to your Obsidian vault path and choose an OCR backend (see below).
 
-### 2. Export a note from your Boox
-
-Open a note in the Boox Notes app -> Share & Export -> PDF -> save to Google Drive, or transfer via USB/BooxDrop/AirDrop.
-Drop the PDF into the folder you set as `inbox` in `config.yaml` (default: `~/boox-inbox`).
-
-### 3. Click the button
+Export a note from your e-ink tablet as a PDF and drop it into your inbox folder.
 
 ```sh
-uv run boox-to-computer gui
+# launch the web UI (one-button processor, opens in browser)
+uv run eink-to-computer gui
+
+# or process from the command line
+uv run eink-to-computer sync
 ```
 
-A web page opens with a single "Process Notes" button.
-Click it, and your note lands in Obsidian as searchable Markdown.
+On macOS, double-click the bundled `E-Ink to Computer.app` to launch the GUI without a terminal.
 
-On macOS, double-click the bundled `Boox to Computer.app` to launch the GUI without a terminal.
+## Choosing an OCR model
 
-## Usage
+The backend needs to be a **vision-capable model** that can read handwriting from page images.
+Any OCR or vision-language model that accepts images and outputs text will work.
 
-```sh
-# web UI (one-button processor, opens in browser)
-uv run boox-to-computer gui
+### Cloud (default: Gemini, free)
 
-# process all pending PDFs in the inbox, then exit
-uv run boox-to-computer sync
-
-# continuous: watch the inbox and process PDFs as they arrive
-uv run boox-to-computer watch
-
-# process a single PDF
-uv run boox-to-computer process "/path/to/exported note.pdf"
-
-# show processed notes and OCR usage
-uv run boox-to-computer status
-```
-
-## Transport options
-
-How PDFs get from the tablet to your computer's inbox folder:
-
-| method | how | automation |
+| backend | cost | setup |
 |---|---|---|
-| **Manual export** (simplest) | Share & Export -> PDF -> Google Drive / USB / AirDrop -> drop in inbox folder | per-note |
-| **Google Drive sync** | Boox Notes -> Settings -> cloud sync -> Google Drive, folder `boox-inbox` | automatic (needs Google Drive for desktop) |
-| **WebDAV** | Run [dufs](https://github.com/sigoden/dufs) on your computer, point Boox Notes WebDAV sync at it | automatic, fully local |
-| **Syncthing** | Syncthing on both ends, sync the `/note/` folder | automatic, fully local |
+| `gemini` | $0 within free tier (250 pages/day) | API key from https://aistudio.google.com |
+| `mistral` | ~$0.05 per 100 pages | API key from https://console.mistral.ai |
 
-## OCR backends
+Set `backend: gemini` in `config.yaml` and paste your API key.
+The free tier covers tens of pages per day with no payment info required.
 
-| backend | cost | quality | privacy |
-|---|---|---|---|
-| `gemini` (default) | $0 within free tier (250 pages/day) | excellent on handwriting | cloud |
-| `mistral` | ~$0.05 per 100 pages | excellent, purpose-built OCR | cloud |
-| `local` | $0, runs on your machine | good, needs 8GB+ free RAM | fully local |
+### Fully local (no cloud, no API key)
 
-For `local`: `brew install ollama && ollama pull qwen3-vl`, then set `backend: local` in `config.yaml`.
+Set `backend: local` in `config.yaml` and run a vision model through [Ollama](https://ollama.com):
+
+```sh
+brew install ollama
+ollama pull qwen3-vl
+```
+
+Any vision-capable model in Ollama's library works.
+Models improve over time, so check [ollama.com/search?q=vision](https://ollama.com/search?q=vision) for current options.
+A few examples (not an exhaustive list):
+
+- `qwen3-vl` - general vision-language model, decent on handwriting
+- `llama3.2-vision` - Meta's vision model
+- Any future model with image input and text output
+
+Local models need 8GB+ of free RAM and run slower than cloud, but nothing leaves your machine.
+
+## Getting PDFs from your tablet
+
+Any method that gets a PDF into your inbox folder works:
+
+- **Manual:** Share & Export -> PDF -> USB / AirDrop / cloud drive -> drop in inbox
+- **Cloud sync:** Many e-ink tablets support Google Drive, Dropbox, or WebDAV sync. Point the sync folder at your inbox.
+- **WebDAV:** Run a local WebDAV server like [dufs](https://github.com/sigoden/dufs) and configure your tablet to sync to it.
+
+## Commands
+
+```sh
+eink-to-computer gui       # web UI with one-button processing
+eink-to-computer sync      # process all pending PDFs, then exit
+eink-to-computer watch     # watch inbox and process PDFs as they arrive
+eink-to-computer process <pdf>  # process a single PDF
+eink-to-computer status    # show processed notes and OCR usage
+```
 
 ## Where notes land
 
-`<vault>/Handwritten Boox Notes/<notebook>/<note-name>.md` with page images in an `attachments/` subfolder next to each note.
-The vault's own sync (Obsidian Sync, iCloud, git, ...) carries the notes to your other devices.
+`<vault>/Handwritten Notes/<notebook>/<note-name>.md` with page images in an `attachments/` subfolder.
+The vault's own sync (Obsidian Sync, iCloud, git, etc.) carries notes to your other devices.
 
 ## Requirements
 
-- Python 3.11+ (managed automatically by [uv](https://docs.astral.sh/uv/))
-- An Obsidian vault (just a folder of Markdown files)
-- A Gemini API key (free) or another OCR backend
+- Python 3.11+ (managed by [uv](https://docs.astral.sh/uv/))
+- An Obsidian vault
+- An OCR backend (Gemini API key, Mistral API key, or a local model via Ollama)
 
 ## License
 
