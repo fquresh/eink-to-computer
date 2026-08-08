@@ -1,0 +1,15 @@
+# Secrets and local config - never commit
+config.yaml
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# Local runtime state
+.lavish/

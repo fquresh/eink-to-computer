@@ -1,0 +1,32 @@
+# Copy this file to config.yaml and fill in your values.
+# config.yaml is gitignored - it may contain your API key.
+
+# Folder the pipeline watches for incoming Boox note PDFs.
+# Point your WebDAV server (or Syncthing/Dropbox folder) here.
+inbox: ~/boox-inbox
+
+# Your Obsidian vault. Notes land in <notes_folder> inside it.
+vault: /path/to/your/Obsidian/Vault
+notes_folder: Handwritten Boox Notes
+
+# OCR backend: gemini (default) | mistral | local
+backend: gemini
+
+gemini:
+  # Get a free key at https://aistudio.google.com -> Get API key.
+  # You can also set the GEMINI_API_KEY environment variable instead.
+  api_key: ""
+  model: gemini-2.5-flash
+  # Free tier limits (2.5 Flash): 10 requests/min, 250 requests/day.
+  requests_per_minute: 10
+  requests_per_day: 250
+
+mistral:
+  # Optional paid fallback. Set MISTRAL_API_KEY env var or fill in here.
+  api_key: ""
+  model: mistral-ocr-latest
+
+local:
+  # Fully local fallback via Ollama (ollama pull qwen3-vl).
+  host: http://127.0.0.1:11434
+  model: qwen3-vl
