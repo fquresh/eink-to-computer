@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dim">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boox to Computer</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5.5.19/daisyui.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@5.5.19/themes.css">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.2.4/dist/index.global.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :where(p, li, .badge, .label) { overflow-wrap: anywhere; }
+  body { min-height: 100vh; display: flex; flex-direction: column; }
+</style>
+</head>
+<body class="bg-base-100 text-base-content">
+
+<main class="flex-1 flex flex-col items-center justify-center p-8 max-w-2xl mx-auto w-full">
+
+  <div class="text-center mb-10">
+    <h1 class="text-4xl font-bold">Boox to Computer</h1>
+    <p class="opacity-60 mt-2">Handwritten notes to Obsidian</p>
+  </div>
+
+  <div class="stats stats-horizontal shadow bg-base-200 mb-8 w-full">
+    <div class="stat">
+      <div class="stat-title">Pending</div>
+      <div class="stat-value {{ 'text-warning' if pending_count > 0 else 'text-success' }}">{{ pending_count }}</div>
+      <div class="stat-desc">PDFs in inbox</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">Processed</div>
+      <div class="stat-value">{{ processed_count }}</div>
+      <div class="stat-desc">notes in vault</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">OCR today</div>
+      <div class="stat-value {{ 'text-error' if ocr_today >= ocr_limit else '' }}">{{ ocr_today }}/{{ ocr_limit }}</div>
+      <div class="stat-desc">{{ backend }}</div>
+    </div>
+  </div>
+
+  <button id="process-btn" class="btn btn-primary btn-lg btn-wide mb-6" onclick="processNotes()">
+    <span id="btn-label">Process Notes</span>
+    <span id="btn-spinner" class="loading loading-spinner loading-sm hidden"></span>
+  </button>
+
+  <div id="result" class="hidden w-full mb-6"></div>
+
+  {% if recent %}
+  <div class="card card-border bg-base-200 w-full">
+    <div class="card-body">
+      <h2 class="card-title text-sm">Recently processed</h2>
+      <ul class="space-y-1 text-sm opacity-70">
+        {% for record in recent %}
+        <li class="flex justify-between gap-4">
+          <span class="truncate">{{ record.note_path.split('/')|last }}</span>
+          <span class="opacity-50 whitespace-nowrap">{{ record.processed_at[:10] }} {{ record.pages }}p</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="text-xs opacity-30 mt-8 text-center">
+    <p>Inbox: {{ inbox }}</p>
+    <p>Vault: {{ vault }}</p>
+  </div>
+
+</main>
+
+<script>
+async function processNotes() {
+  const btn = document.getElementById('process-btn');
+  const label = document.getElementById('btn-label');
+  const spinner = document.getElementById('btn-spinner');
+  const result = document.getElementById('result');
+
+  btn.disabled = true;
+  label.textContent = 'Processing...';
+  spinner.classList.remove('hidden');
+
+  try {
+    const response = await fetch('/process', { method: 'POST' });
+    const data = await response.json();
+    result.classList.remove('hidden');
+    if (data.failed > 0) {
+      result.innerHTML = '<div class="alert alert-warning"><span>Processed ' + data.processed + ' note(s), ' + data.failed + ' failed. Check console output.</span></div>';
+    } else if (data.processed === 0) {
+      result.innerHTML = '<div class="alert alert-info"><span>No new notes to process.</span></div>';
+    } else {
+      result.innerHTML = '<div class="alert alert-success"><span>Done! ' + data.processed + ' note(s) sent to Obsidian.</span></div>';
+    }
+    setTimeout(() => location.reload(), 2000);
+  } catch (err) {
+    result.classList.remove('hidden');
+    result.innerHTML = '<div class="alert alert-error"><span>Error: ' + err.message + '</span></div>';
+  } finally {
+    btn.disabled = false;
+    label.textContent = 'Process Notes';
+    spinner.classList.add('hidden');
+  }
+}
+</script>
+
+</body>
+</html>

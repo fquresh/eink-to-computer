@@ -9,6 +9,7 @@ dependencies = [
     "pyyaml>=6.0",
     "google-genai>=1.0",
     "requests>=2.31",
+    "flask>=3.0",
 ]
 
 [project.optional-dependencies]

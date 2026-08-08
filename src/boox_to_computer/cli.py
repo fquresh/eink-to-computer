@@ -10,6 +10,7 @@ from .config import load_config
 from .ingest import watch
 from .pipeline import process_inbox, process_pdf
 from .state import load_state
+from .web import launch_gui
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -23,6 +24,9 @@ def main(argv: list[str] | None = None) -> int:
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("watch", help="Watch the inbox and process PDFs as they arrive")
     commands.add_parser("sync", help="Process all pending PDFs in the inbox, then exit")
+    gui_cmd = commands.add_parser("gui", help="Launch the web UI (one-button processor)")
+    gui_cmd.add_argument("--port", type=int, default=7788, help="Port for the web UI (default: 7788)")
+    gui_cmd.add_argument("--no-browser", action="store_true", help="Don't auto-open the browser")
     process_cmd = commands.add_parser("process", help="Process a single PDF")
     process_cmd.add_argument("pdf", type=Path)
     commands.add_parser("status", help="Show processed notes and OCR usage")
@@ -36,6 +40,9 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "watch":
         watch(config)
+        return 0
+    if args.command == "gui":
+        launch_gui(config, port=args.port, open_browser=not args.no_browser)
         return 0
     if args.command == "sync":
         processed, failed = process_inbox(config)
