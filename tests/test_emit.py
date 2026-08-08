@@ -28,6 +28,19 @@ def test_build_markdown_structure():
     assert "- idea one" in md
 
 
+def test_build_markdown_page_numbers_sequential():
+    md = build_markdown(
+        title="t",
+        notebook="",
+        pdf_hash="h",
+        page_images=["t-p1.png", "t-p2.png", "t-p3.png"],
+        transcriptions=["one", "two", "three"],
+        created=datetime(2026, 8, 5),
+    )
+    assert md.count("## Page ") == 3
+    assert "## Page 1" in md and "## Page 2" in md and "## Page 3" in md
+
+
 def test_emit_note_writes_note_and_attachments(tmp_path: Path):
     notes_dir = tmp_path / "vault" / "Handwritten Boox Notes"
     image = tmp_path / "page-001.png"

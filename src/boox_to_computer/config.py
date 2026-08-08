@@ -17,7 +17,7 @@ DEFAULT_CONFIG_PATHS = [
 @dataclass
 class GeminiConfig:
     api_key: str = ""
-    model: str = "gemini-2.5-flash"
+    model: str = "gemini-3.5-flash"
     requests_per_minute: int = 10
     requests_per_day: int = 250
 

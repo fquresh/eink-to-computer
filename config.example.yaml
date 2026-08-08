@@ -16,8 +16,8 @@ gemini:
   # Get a free key at https://aistudio.google.com -> Get API key.
   # You can also set the GEMINI_API_KEY environment variable instead.
   api_key: ""
-  model: gemini-2.5-flash
-  # Free tier limits (2.5 Flash): 10 requests/min, 250 requests/day.
+  model: gemini-3.5-flash
+  # Free tier limits: keep these conservative; the daily counter enforces them.
   requests_per_minute: 10
   requests_per_day: 250
 

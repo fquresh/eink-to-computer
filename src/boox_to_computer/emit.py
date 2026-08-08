@@ -39,8 +39,8 @@ def build_markdown(
         ]
     )
     parts = [frontmatter, f"# {title}\n"]
-    for image_name, text in zip(page_images, transcriptions):
-        parts.append(f"## Page {len(parts) - 1}\n")
+    for page_number, (image_name, text) in enumerate(zip(page_images, transcriptions), start=1):
+        parts.append(f"## Page {page_number}\n")
         parts.append(f"![[{ATTACHMENTS_DIR}/{image_name}]]\n")
         parts.append(text + "\n")
     return "\n".join(parts)
