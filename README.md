@@ -5,7 +5,7 @@ Handwritten notes from an ONYX Boox tablet, automatically transcribed by a visio
 ## How it works
 
 ```
-Boox Notes app --(native WebDAV sync, PDF)--> ~/boox-inbox (this Mac)
+Boox Notes app --(native Google Drive sync, PDF)--> Google Drive --> ~/boox-inbox (this Mac)
   --> boox-to-computer watch
     --> render pages (PyMuPDF)
     --> transcribe (Gemini 2.5 Flash free tier)
@@ -36,24 +36,21 @@ You can also set the `GEMINI_API_KEY` environment variable instead of putting it
 
 On the Boox (Note Air, firmware 3.1+):
 
-1. Open the Notes app -> hamburger menu -> Settings.
-2. Enable automatic PDF export of notes if available ("auto-generate PDF on close").
-3. In Notes sync settings, choose **WebDAV** as the cloud provider.
-4. Enter the WebDAV URL of the inbox server (below), plus any username/password you configured.
-5. Set sync to happen on change (or a short interval).
+1. Open the Notes app -> hamburger menu -> Settings -> cloud sync.
+2. Choose **Google Drive** and sign in.
+3. Set the sync folder to `boox-inbox` and the format to PDF.
+4. Set sync to happen on change (or a short interval).
 
-### 3. Inbox server on the Mac
+For a one-off test you can instead open a note -> Share & Export -> PDF -> Google Drive -> `boox-inbox`.
 
-Any WebDAV server pointed at `~/boox-inbox` works.
-The simplest is [dufs](https://github.com/sigoden/dufs):
+### 3. Inbox on the Mac
 
-```sh
-brew install dufs
-dufs --allow-upload --allow-mkdir ~/boox-inbox --bind 0.0.0.0 --port 5000
-```
+Quick test: download the exported PDF from drive.google.com and drop it into `~/boox-inbox`.
 
-Find your Mac's LAN IP (`ipconfig getifaddr en0`) and use `http://<mac-ip>:5000` as the WebDAV URL on the tablet.
-Alternatives: Syncthing on both ends, or the Boox's native Dropbox sync with the Dropbox folder as `inbox`.
+Full automation: install Google Drive for desktop (https://www.google.com/drive/download/), let it create `~/Library/CloudStorage/GoogleDrive-<you>/My Drive/boox-inbox`, and mark that folder "Available offline".
+Then set `inbox` in `config.yaml` to that path.
+
+Fully-local alternatives (no cloud): run a WebDAV server with [dufs](https://github.com/sigoden/dufs) pointed at `~/boox-inbox`, or use Syncthing on both ends.
 
 ### 4. Run
 
