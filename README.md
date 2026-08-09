@@ -50,10 +50,19 @@ Any OCR or vision-language model that accepts images and outputs text will work.
 | backend | cost | setup |
 |---|---|---|
 | `gemini` | $0 within free tier (250 pages/day) | API key from https://aistudio.google.com |
-| `mistral` | ~$0.05 per 100 pages | API key from https://console.mistral.ai |
+| `openrouter` | ~$0.33 per 1,000 pages (Qwen3 VL 32B) | API key from https://openrouter.ai/keys |
+| `mistral` | ~$0.40 per 100 pages (dedicated OCR, no formatting) | API key from https://console.mistral.ai |
 
 Set `backend: gemini` in `config.yaml` and paste your API key.
 The free tier covers tens of pages per day with no payment info required.
+
+`gemini-3.5-flash-lite` is a good balance of quality and cost (~$2.80/1K pages paid).
+For cheaper processing, `openrouter` with `qwen/qwen3-vl-32b-instruct` costs ~$0.33/1K pages.
+Browse vision models at [openrouter.ai/models?q=vision](https://openrouter.ai/models?q=vision).
+
+Note: `mistral` uses a dedicated OCR engine that does literal transcription.
+It does not follow formatting instructions (caps normalization, Markdown structure).
+Use `gemini` or `openrouter` when you need clean Markdown output.
 
 ### Fully local (no cloud, no API key)
 

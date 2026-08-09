@@ -35,6 +35,13 @@ class LocalConfig:
 
 
 @dataclass
+class OpenRouterConfig:
+    api_key: str = ""
+    model: str = "qwen/qwen3-vl-32b-instruct"
+    base_url: str = "https://openrouter.ai/api/v1"
+
+
+@dataclass
 class Config:
     inbox: Path
     vault: Path
@@ -43,6 +50,7 @@ class Config:
     gemini: GeminiConfig = field(default_factory=GeminiConfig)
     mistral: MistralConfig = field(default_factory=MistralConfig)
     local: LocalConfig = field(default_factory=LocalConfig)
+    openrouter: OpenRouterConfig = field(default_factory=OpenRouterConfig)
 
     @property
     def notes_dir(self) -> Path:
@@ -77,7 +85,9 @@ def load_config(path: Path | None = None) -> Config:
         gemini=GeminiConfig(**raw.get("gemini", {})),
         mistral=MistralConfig(**raw.get("mistral", {})),
         local=LocalConfig(**raw.get("local", {})),
+        openrouter=OpenRouterConfig(**raw.get("openrouter", {})),
     )
     cfg.gemini.api_key = _resolve_api_key(cfg.gemini.api_key, "GEMINI_API_KEY")
     cfg.mistral.api_key = _resolve_api_key(cfg.mistral.api_key, "MISTRAL_API_KEY")
+    cfg.openrouter.api_key = _resolve_api_key(cfg.openrouter.api_key, "OPENROUTER_API_KEY")
     return cfg

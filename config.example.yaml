@@ -11,7 +11,7 @@ inbox: ~/eink-inbox
 vault: /path/to/your/Obsidian/Vault
 notes_folder: Handwritten Notes
 
-# OCR backend: gemini | mistral | local
+# OCR backend: gemini | mistral | local | openrouter
 # All backends use vision/OCR-capable models. See README for guidance.
 backend: gemini
 
@@ -37,3 +37,16 @@ local:
   # Models improve over time - check https://ollama.com/search?q=vision for current options.
   host: http://127.0.0.1:11434
   model: qwen3-vl
+
+openrouter:
+  # OpenRouter gives access to many vision models through one API.
+  # Get a key at https://openrouter.ai/keys.
+  # You can also set the OPENROUTER_API_KEY environment variable instead.
+  # Browse vision models at https://openrouter.ai/models?q=vision.
+  # Nemotron Nano 12B 2 VL (free) scores well on OCRBench v2 but requires
+  # enabling prompt logging at https://openrouter.ai/settings/privacy.
+  # Qwen3 VL 32B Instruct is a strong alternative that works without changes.
+  # Other options: openai/gpt-4o-mini, nvidia/nemotron-nano-12b-v2-vl:free
+  api_key: ""
+  model: qwen/qwen3-vl-32b-instruct
+  base_url: https://openrouter.ai/api/v1

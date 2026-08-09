@@ -22,4 +22,8 @@ def build_backend(config: Config, state: State) -> OCRBackend:
         from .local import LocalBackend
 
         return LocalBackend(config.local)
+    if config.backend == "openrouter":
+        from .openrouter import OpenRouterBackend
+
+        return OpenRouterBackend(config.openrouter)
     raise ValueError(f"Unknown OCR backend: {config.backend!r}")
