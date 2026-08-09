@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from eink_to_computer.state import (
+from eink_to_obsidian.state import (
     ProcessedRecord,
     State,
     hash_file,

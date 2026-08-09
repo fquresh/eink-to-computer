@@ -1,7 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 
-from eink_to_computer.emit import build_markdown, emit_note, slugify
+from eink_to_obsidian.emit import build_markdown, emit_note, slugify
 
 
 def test_slugify():

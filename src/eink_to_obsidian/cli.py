@@ -1,4 +1,4 @@
-"""eink-to-computer CLI: watch | process <pdf> | status"""
+"""eink-to-obsidian CLI: watch | process <pdf> | status"""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ from .web import launch_gui
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        prog="eink-to-computer",
+        prog="eink-to-obsidian",
         description="E-ink handwritten note PDFs -> vision OCR -> Obsidian markdown",
     )
     parser.add_argument(

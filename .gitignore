@@ -13,3 +13,4 @@ build/
 
 # Local runtime state
 .lavish/
+.DS_Store

@@ -1,4 +1,4 @@
-# eink-to-computer
+# eink-to-obsidian
 
 Handwritten notes from any e-ink tablet, transcribed by a vision model and filed as searchable Markdown in Obsidian.
 
@@ -8,7 +8,7 @@ Works with Boox, reMarkable, Supernote, Kindle Scribe, and any device that can e
 
 ```
 E-ink tablet --(export PDF)--> inbox folder (your computer)
-  --> eink-to-computer
+  --> eink-to-obsidian
     --> render pages to images
     --> transcribe with a vision/OCR model
     --> write Markdown + page images into your Obsidian vault
@@ -20,8 +20,8 @@ The original page image is always embedded above the transcription, so nothing i
 ## Quick start
 
 ```sh
-git clone https://github.com/fquresh/eink-to-computer.git
-cd eink-to-computer
+git clone https://github.com/fquresh/eink-to-obsidian.git
+cd eink-to-obsidian
 uv sync
 cp config.example.yaml config.yaml
 ```
@@ -32,13 +32,13 @@ Export a note from your e-ink tablet as a PDF and drop it into your inbox folder
 
 ```sh
 # launch the web UI (one-button processor, opens in browser)
-uv run eink-to-computer gui
+uv run eink-to-obsidian gui
 
 # or process from the command line
-uv run eink-to-computer sync
+uv run eink-to-obsidian sync
 ```
 
-On macOS, double-click the bundled `E-Ink to Computer.app` to launch the GUI without a terminal.
+On macOS, double-click the bundled `E-Ink to Obsidian.app` to launch the GUI without a terminal.
 
 ## Choosing an OCR model
 
@@ -94,11 +94,11 @@ Any method that gets a PDF into your inbox folder works:
 ## Commands
 
 ```sh
-eink-to-computer gui       # web UI with one-button processing
-eink-to-computer sync      # process all pending PDFs, then exit
-eink-to-computer watch     # watch inbox and process PDFs as they arrive
-eink-to-computer process <pdf>  # process a single PDF
-eink-to-computer status    # show processed notes and OCR usage
+eink-to-obsidian gui       # web UI with one-button processing
+eink-to-obsidian sync      # process all pending PDFs, then exit
+eink-to-obsidian watch     # watch inbox and process PDFs as they arrive
+eink-to-obsidian process <pdf>  # process a single PDF
+eink-to-obsidian status    # show processed notes and OCR usage
 ```
 
 ## Where notes land
@@ -110,7 +110,7 @@ The vault's own sync (Obsidian Sync, iCloud, git, etc.) carries notes to your ot
 
 - Python 3.11+ (managed by [uv](https://docs.astral.sh/uv/))
 - An Obsidian vault
-- An OCR backend (Gemini API key, Mistral API key, or a local model via Ollama)
+- An OCR backend (Gemini API key, OpenRouter API key, Mistral API key, or a local model via Ollama)
 
 ## License
 

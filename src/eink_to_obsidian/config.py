@@ -1,4 +1,4 @@
-"""Configuration loading for eink-to-computer."""
+"""Configuration loading for eink-to-obsidian."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ import yaml
 
 DEFAULT_CONFIG_PATHS = [
     Path("config.yaml"),
-    Path.home() / ".config" / "eink-to-computer" / "config.yaml",
+    Path.home() / ".config" / "eink-to-obsidian" / "config.yaml",
 ]
 
 
@@ -58,7 +58,7 @@ class Config:
 
     @property
     def state_path(self) -> Path:
-        return self.inbox / ".eink-to-computer-state.json"
+        return self.inbox / ".eink-to-obsidian-state.json"
 
 
 def _resolve_api_key(config_value: str, env_var: str) -> str:

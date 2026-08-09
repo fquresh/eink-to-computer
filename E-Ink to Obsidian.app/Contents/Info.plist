@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleName</key>
-    <string>E-Ink to Computer</string>
+    <string>E-Ink to Obsidian</string>
     <key>CFBundleDisplayName</key>
-    <string>E-Ink to Computer</string>
+    <string>E-Ink to Obsidian</string>
     <key>CFBundleIdentifier</key>
-    <string>com.fquresh.eink-to-computer</string>
+    <string>com.fquresh.eink-to-obsidian</string>
     <key>CFBundleVersion</key>
     <string>0.1.0</string>
     <key>CFBundleShortVersionString</key>
